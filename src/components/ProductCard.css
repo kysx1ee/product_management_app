@@ -1,0 +1,43 @@
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  background: #fff;
+  transition: 0.2s;
+}
+
+.card.low-stock {
+  border-color: red;
+  background: #ffe6e6;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.price {
+  color: #7a1f4b;
+  font-weight: bold;
+}
+
+.buttons button {
+  margin: 3px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background: #7a1f4b;
+  color: white;
+  cursor: pointer;
+}
+
+.buttons button:hover {
+  background: #a53f6d;
+}
