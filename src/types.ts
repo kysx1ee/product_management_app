@@ -6,6 +6,7 @@ export interface Product {
   specification: string;
   rating: number;
   price: number;
-  quantity: number;
+  quantity: number; // quantity selected for cart
+  stock: number;    // total stock available
   image: string;
 }

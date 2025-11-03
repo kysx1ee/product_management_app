@@ -7,14 +7,18 @@ interface Props {
   products: Product[];
   onSelect: (product: Product) => void;
   onQuantityChange: (id: number, delta: number) => void;
+  onAddToCart: (product: Product) => void;
 }
 
-const ProductList: React.FC<Props> = ({ products, onSelect, onQuantityChange }) => {
+const ProductList: React.FC<Props> = ({
+  products,
+  onSelect,
+  onQuantityChange,
+  onAddToCart,
+}) => {
   const [filter, setFilter] = useState<string>("All");
-
   const filteredProducts =
     filter === "All" ? products : products.filter((p) => p.category === filter);
-
   const categories = ["All", ...new Set(products.map((p) => p.category))];
 
   return (
@@ -35,6 +39,7 @@ const ProductList: React.FC<Props> = ({ products, onSelect, onQuantityChange }) 
             product={product}
             onSelect={() => onSelect(product)}
             onQuantityChange={onQuantityChange}
+            onAddToCart={() => onAddToCart(product)}
           />
         ))}
       </div>
