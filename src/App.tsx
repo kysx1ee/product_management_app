@@ -87,11 +87,13 @@ const App: React.FC = () => {
   const [showCart, setShowCart] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
+  // Add a new perfume
   const addProduct = (newProduct: Product) => {
     setProducts([...products, { ...newProduct, id: Date.now() }]);
     setShowForm(false);
   };
 
+  // Adjust quantity (in the product list)
   const handleQuantityChange = (id: number, delta: number) => {
     setProducts(
       products.map((p) => {
@@ -104,6 +106,7 @@ const App: React.FC = () => {
     );
   };
 
+  // Add to cart
   const handleAddToCart = (product: Product) => {
     if (product.quantity > 0) {
       const existing = cart.find((item) => item.id === product.id);
@@ -118,6 +121,7 @@ const App: React.FC = () => {
       } else {
         setCart([...cart, { ...product }]);
       }
+
       // Reduce stock and reset quantity
       setProducts(
         products.map((p) =>
@@ -129,10 +133,12 @@ const App: React.FC = () => {
     }
   };
 
+  // Remove product from cart
   const handleRemoveFromCart = (id: number) => {
     setCart(cart.filter((item) => item.id !== id));
   };
 
+  // Clear all items in cart
   const handleClearCart = () => {
     setCart([]);
   };
@@ -149,8 +155,12 @@ const App: React.FC = () => {
         </div>
       </header>
 
+      {/* ✅ FIXED: ProductDetail now always uses live data from products */}
       {selectedProduct ? (
-        <ProductDetail product={selectedProduct} onBack={() => setSelectedProduct(null)} />
+        <ProductDetail
+          product={products.find((p) => p.id === selectedProduct.id)!}
+          onBack={() => setSelectedProduct(null)}
+        />
       ) : (
         <ProductList
           products={products}
@@ -160,6 +170,7 @@ const App: React.FC = () => {
         />
       )}
 
+      {/* Cart Popup */}
       {showCart && (
         <div className="popup-overlay" onClick={() => setShowCart(false)}>
           <div className="popup" onClick={(e) => e.stopPropagation()}>
@@ -174,6 +185,7 @@ const App: React.FC = () => {
         </div>
       )}
 
+      {/* Add Perfume Popup */}
       {showForm && (
         <div className="popup-overlay" onClick={() => setShowForm(false)}>
           <div className="popup" onClick={(e) => e.stopPropagation()}>

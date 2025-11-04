@@ -18,7 +18,8 @@ const ProductDetail: React.FC<Props> = ({ product, onBack }) => {
       <p><b>Specification:</b> {product.specification}</p>
       <p><b>Rating:</b> ⭐ {product.rating}</p>
       <p><b>Price:</b> ₱{product.price}</p>
-      <p><b>Quantity:</b> {product.quantity}</p>
+      <p><b>Quantity Selected:</b> {product.quantity}</p>
+      <p><b>Stock Available:</b> {product.stock}</p>
     </div>
   );
 };
