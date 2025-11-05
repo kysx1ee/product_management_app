@@ -87,13 +87,13 @@ const App: React.FC = () => {
   const [showCart, setShowCart] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  // Add a new perfume
+  // ➕ Add new perfume
   const addProduct = (newProduct: Product) => {
     setProducts([...products, { ...newProduct, id: Date.now() }]);
     setShowForm(false);
   };
 
-  // Adjust quantity (in the product list)
+  // 🔼 Adjust quantity
   const handleQuantityChange = (id: number, delta: number) => {
     setProducts(
       products.map((p) => {
@@ -106,7 +106,7 @@ const App: React.FC = () => {
     );
   };
 
-  // Add to cart
+  // 🛒 Add to cart (stock stays the same)
   const handleAddToCart = (product: Product) => {
     if (product.quantity > 0) {
       const existing = cart.find((item) => item.id === product.id);
@@ -122,40 +122,61 @@ const App: React.FC = () => {
         setCart([...cart, { ...product }]);
       }
 
-      // Reduce stock and reset quantity
+      // ✅ Only reset quantity, don't reduce stock yet
       setProducts(
         products.map((p) =>
-          p.id === product.id
-            ? { ...p, stock: p.stock - product.quantity, quantity: 0 }
-            : p
+          p.id === product.id ? { ...p, quantity: 0 } : p
         )
       );
     }
   };
 
-  // Remove product from cart
+  // ❌ Remove from cart
   const handleRemoveFromCart = (id: number) => {
     setCart(cart.filter((item) => item.id !== id));
   };
 
-  // Clear all items in cart
+  // 🧹 Clear entire cart
   const handleClearCart = () => {
     setCart([]);
   };
 
-  const total = cart.reduce((sum, product) => sum + product.price * product.quantity, 0);
+  // 💳 Purchase confirmed → decrease stock now
+  const handlePurchase = () => {
+    setProducts(
+      products.map((p) => {
+        const purchased = cart.find((item) => item.id === p.id);
+        if (purchased) {
+          return { ...p, stock: p.stock - purchased.quantity };
+        }
+        return p;
+      })
+    );
+
+    setCart([]);
+    alert("✨ Thank you for your purchase!");
+  };
+
+  const total = cart.reduce(
+    (sum, product) => sum + product.price * product.quantity,
+    0
+  );
 
   return (
     <div className="app-container">
       <header className="topbar">
         <h1>Enchanté Essence</h1>
         <div className="header-buttons">
-          <button className="open-btn" onClick={() => setShowForm(true)}>➕ Add Perfume</button>
-          <button className="open-btn" onClick={() => setShowCart(true)}>🛒 View Cart ({cart.length})</button>
+          <button className="open-btn" onClick={() => setShowForm(true)}>
+            ➕ Add Perfume
+          </button>
+          <button className="open-btn" onClick={() => setShowCart(true)}>
+            🛒 View Cart ({cart.length})
+          </button>
         </div>
       </header>
 
-      {/* ✅ FIXED: ProductDetail now always uses live data from products */}
+      {/* Product Details or Product List */}
       {selectedProduct ? (
         <ProductDetail
           product={products.find((p) => p.id === selectedProduct.id)!}
@@ -170,7 +191,7 @@ const App: React.FC = () => {
         />
       )}
 
-      {/* Cart Popup */}
+      {/* 🛍️ Cart Popup */}
       {showCart && (
         <div className="popup-overlay" onClick={() => setShowCart(false)}>
           <div className="popup" onClick={(e) => e.stopPropagation()}>
@@ -179,18 +200,29 @@ const App: React.FC = () => {
               onRemove={handleRemoveFromCart}
               total={total}
               onClear={handleClearCart}
+              onPurchase={handlePurchase} // ✅ added
             />
-            <button className="close-btn" onClick={() => setShowCart(false)}>Close</button>
+            <button
+              className="close-btn"
+              onClick={() => setShowCart(false)}
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
 
-      {/* Add Perfume Popup */}
+      {/* ➕ Add Perfume Popup */}
       {showForm && (
         <div className="popup-overlay" onClick={() => setShowForm(false)}>
           <div className="popup" onClick={(e) => e.stopPropagation()}>
             <ProductForm onAdd={addProduct} />
-            <button className="close-btn" onClick={() => setShowForm(false)}>Close</button>
+            <button
+              className="close-btn"
+              onClick={() => setShowForm(false)}
+            >
+              Close
+            </button>
           </div>
         </div>
       )}

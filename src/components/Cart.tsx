@@ -7,9 +7,10 @@ interface CartProps {
   onRemove: (id: number) => void;
   total: number;
   onClear: () => void;
+  onPurchase: () => void; // ✅ new prop
 }
 
-const Cart: React.FC<CartProps> = ({ cartItems, onRemove, total, onClear }) => {
+const Cart: React.FC<CartProps> = ({ cartItems, onRemove, total, onClear, onPurchase }) => {
   const handlePurchase = () => {
     if (cartItems.length === 0) {
       alert("Your cart is empty. Add some perfumes first!");
@@ -21,8 +22,7 @@ const Cart: React.FC<CartProps> = ({ cartItems, onRemove, total, onClear }) => {
     );
 
     if (confirmPurchase) {
-      alert("✨ Thank you for your purchase!");
-      onClear();
+      onPurchase(); // ✅ triggers stock update + clear cart
     }
   };
 
